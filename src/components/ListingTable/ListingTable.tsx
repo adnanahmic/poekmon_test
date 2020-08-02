@@ -14,10 +14,11 @@ import { Listing } from "model/model";
 interface Props {
 	list: Listing[];
 	history: any;
+	search?: string;
 }
 
 function ListingTable(props: Props) {
-	const { list, history } = props;
+	const { list, history, search } = props;
 	const classes = useStyles();
 
 	const getPokemonId = (url: string) => {
@@ -32,6 +33,9 @@ function ListingTable(props: Props) {
 		}
 	};
 	if (!list) return null;
+	const filteredList = search
+		? list.filter((item) => item.name.indexOf(search) !== -1)
+		: list;
 	return (
 		<Paper className={classes.paper}>
 			<div className={classes.tableWrapper}>
@@ -43,7 +47,7 @@ function ListingTable(props: Props) {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{list.map((listing, index) => {
+						{filteredList.map((listing) => {
 							return (
 								<TableRow
 									key={getPokemonId(listing.url)}

@@ -9,8 +9,6 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { red } from "@material-ui/core/colors";
-// redux
-import { Detail } from "model/model";
 
 interface Props {
 	data: any;
@@ -59,8 +57,8 @@ function DetailCard(props: Props) {
 					</ul>
 				</div>
 				<div>
-					<img src={data.sprites.front_default} />
-					<img src={data.sprites.back_default} />
+					<img src={data.sprites.front_default} alt="front-sprites" />
+					<img src={data.sprites.back_default} alt="back-sprites" />
 				</div>
 			</CardContent>
 			<CardActions style={{ justifyContent: "center" }}>

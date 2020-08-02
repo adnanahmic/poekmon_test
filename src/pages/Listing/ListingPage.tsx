@@ -1,4 +1,4 @@
-import { Button, Grid, Typography } from "@material-ui/core";
+import { Button, Grid, TextField } from "@material-ui/core";
 import { Theme } from "@material-ui/core/styles";
 import { WithStyles, createStyles, withStyles } from "@material-ui/core/styles";
 
@@ -29,10 +29,9 @@ const styles = (theme: Theme) =>
 			width: "100%",
 			display: "flex",
 			justifyContent: "flex-end",
-		},
-
-		button: {
-			marginBottom: 15,
+			"& > *": {
+				margin: theme.spacing(1),
+			},
 		},
 	});
 
@@ -48,6 +47,9 @@ interface Props extends RouteComponentProps<void>, WithStyles<typeof styles> {
 }
 
 class ListingPage extends React.Component<Props> {
+	state = {
+		search: "",
+	};
 	componentDidMount() {
 		const { offset, limit, actions } = this.props;
 		const query = {
@@ -76,18 +78,44 @@ class ListingPage extends React.Component<Props> {
 		};
 		actions.getListingAction(query);
 	};
+
+	fetchAll = () => {
+		const { actions } = this.props;
+		const query = {
+			offset: 0,
+			limit: 1000,
+		};
+		actions.getListingAction(query);
+	};
+
+	handleChange = (e: any) => {
+		this.setState({ search: e.target.value });
+	};
 	render() {
 		const { listings, previous, classes, loading, history } = this.props;
 
 		return (
 			<Grid container className={classes.root}>
 				{loading && <Loader />}
-				<Grid item xs={6}></Grid>
+				<Grid item xs={6}>
+					<TextField
+						fullWidth
+						id="search"
+						label="Search pokemon by name"
+						onChange={this.handleChange}
+					/>
+				</Grid>
 				<Grid item xs={6}>
 					<div className={classes.buttonContainer}>
+						<Button
+							variant="contained"
+							color="primary"
+							onClick={this.fetchAll}
+						>
+							Fetch All
+						</Button>
 						{previous && (
 							<Button
-								className={classes.button}
 								variant="contained"
 								color="secondary"
 								onClick={this.prevPage}
@@ -96,7 +124,6 @@ class ListingPage extends React.Component<Props> {
 							</Button>
 						)}{" "}
 						<Button
-							className={classes.button}
 							variant="contained"
 							color="secondary"
 							onClick={this.nextPage}
@@ -106,7 +133,11 @@ class ListingPage extends React.Component<Props> {
 					</div>
 				</Grid>
 				<Grid item xs={12}>
-					<ListingTable list={listings} history={history} />
+					<ListingTable
+						list={listings}
+						history={history}
+						search={this.state.search}
+					/>
 				</Grid>
 			</Grid>
 		);

@@ -4,20 +4,16 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import App from "../App";
 import configureStore from "./configureStore";
-
+import Loader from "../components/Loader";
 
 const { persistor, store } = configureStore();
 
 function ReduxRoot() {
 	return (
 		<Provider store={store}>
-			<PersistGate
-				loading={<Typography>Loading...</Typography>}
-				persistor={persistor}
-			>
+			<PersistGate loading={<Loader />} persistor={persistor}>
 				<App />
 			</PersistGate>
-
 		</Provider>
 	);
 }

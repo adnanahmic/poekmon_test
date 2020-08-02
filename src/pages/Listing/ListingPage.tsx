@@ -12,6 +12,7 @@ import * as listingActions from "redux/listing/listingActions";
 import { RootState } from "redux/rootReducer";
 
 import ListingTable from "components/ListingTable/ListingTable";
+import Loader from "components/Loader";
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -75,10 +76,11 @@ class ListingPage extends React.Component<Props> {
 		actions.getListingAction(query);
 	};
 	render() {
-		const { listings, previous, classes } = this.props;
+		const { listings, previous, classes, loading, history } = this.props;
 
 		return (
 			<Grid container className={classes.root}>
+				{loading && <Loader />}
 				<Grid item xs={6}></Grid>
 				<Grid item xs={6}>
 					<div className={classes.buttonContainer}>
@@ -103,7 +105,7 @@ class ListingPage extends React.Component<Props> {
 					</div>
 				</Grid>
 				<Grid item xs={12}>
-					<ListingTable list={listings} />
+					<ListingTable list={listings} history={history} />
 				</Grid>
 			</Grid>
 		);

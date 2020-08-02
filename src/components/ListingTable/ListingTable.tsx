@@ -13,14 +13,23 @@ import { Listing } from "model/model";
 
 interface Props {
 	list: Listing[];
+	history: any;
 }
 
 function ListingTable(props: Props) {
-	const { list } = props;
+	const { list, history } = props;
 	const classes = useStyles();
 
+	const getPokemonId = (url: string) => {
+		return Number(url.split("/")[6]);
+	};
+
 	const onRowClick = (listing: Listing) => {
-		console.log(listing);
+		const { url } = listing;
+		const id = getPokemonId(url);
+		if (id) {
+			history.push(`/pokemon/${id}`);
+		}
 	};
 
 	return (
@@ -37,17 +46,14 @@ function ListingTable(props: Props) {
 						{list.map((listing, index) => {
 							return (
 								<TableRow
-									key={index}
+									key={getPokemonId(listing.url)}
 									hover
 									onClick={(event) => onRowClick(listing)}
 								>
-									<TableCell padding="none">
-										{index + 1}
+									<TableCell>
+										{getPokemonId(listing.url)}
 									</TableCell>
-									<TableCell padding="none">
-										{" "}
-										{listing.name}
-									</TableCell>
+									<TableCell> {listing.name}</TableCell>
 								</TableRow>
 							);
 						})}

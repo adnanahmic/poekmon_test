@@ -12,6 +12,7 @@ import { RootState } from "./redux/rootReducer";
 import withRoot from "./withRoot";
 
 import ListingPage from "pages/Listing/ListingPage";
+import DetailPage from "pages/Detail/DetailPage";
 
 function Routes() {
 	const classes = useStyles();
@@ -19,6 +20,7 @@ function Routes() {
 	return (
 		<div className={classes.content}>
 			<Route exact={true} path="/" component={ListingPage} />
+			<Route exact={true} path="/pokemon/:id" component={DetailPage} />
 		</div>
 	);
 }

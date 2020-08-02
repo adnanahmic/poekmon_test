@@ -10,6 +10,7 @@ export enum MethodType {
 }
 
 export const listingRoute = `/pokemon/`;
+export const typeRoute = `/type/`;
 
 export const createApiCall = async ({
 	method = "GET",

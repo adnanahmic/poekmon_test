@@ -17,7 +17,6 @@ function* getListingSaga({
 					: ""
 			}`,
 			data: undefined,
-			auth: true,
 		});
 		yield put({
 			type: ActionType.LISTING_REQUEST_SUCCESS,
@@ -34,8 +33,8 @@ function* getListingSaga({
 		yield put({ type: ActionType.LISTING_REQUEST_ERROR, payload: error });
 	}
 }
-function* onLoginSubmitWatcher() {
+function* onListSubmitWatcher() {
 	yield takeLatest(ActionType.LISTING_REQUEST as any, getListingSaga);
 }
 
-export default [fork(onLoginSubmitWatcher)];
+export default [fork(onListSubmitWatcher)];

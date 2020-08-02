@@ -56,6 +56,7 @@ class ListingPage extends React.Component<Props> {
 		};
 		actions.getListingAction(query);
 	}
+
 	nextPage = () => {
 		const { offset, limit, next, count, actions } = this.props;
 		if (count > 0 && next) return;

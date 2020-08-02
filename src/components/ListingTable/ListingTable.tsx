@@ -31,7 +31,7 @@ function ListingTable(props: Props) {
 			history.push(`/pokemon/${id}`);
 		}
 	};
-
+	if (!list) return null;
 	return (
 		<Paper className={classes.paper}>
 			<div className={classes.tableWrapper}>

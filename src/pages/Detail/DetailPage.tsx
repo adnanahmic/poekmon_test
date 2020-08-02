@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import { Grid, Dialog, Button } from "@material-ui/core";
 import { Theme } from "@material-ui/core/styles";
 import { WithStyles, createStyles, withStyles } from "@material-ui/core/styles";
 
@@ -13,6 +13,7 @@ import { RootState } from "redux/rootReducer";
 
 import Loader from "components/Loader";
 import DetailCard from "components/Detail";
+import ListingTable from "components/ListingTable/ListingTable";
 
 const styles = (theme: Theme) =>
 	createStyles({
@@ -48,16 +49,27 @@ interface Props extends RouteComponentProps<void>, WithStyles<typeof styles> {
 interface State {
 	pokemon: any;
 	open: boolean;
+	loading: boolean;
 }
 
 class DetailPage extends React.Component<Props, State> {
 	state = {
 		pokemon: [],
 		open: false,
+		loading: false,
 	};
 	componentDidMount() {
 		const { actions, match } = this.props;
 		actions.getDetailAction(match.params.id);
+	}
+
+	componentDidUpdate(prevProps: any, prevState: any) {
+		console.log(prevState, prevProps);
+		const { actions, match } = this.props;
+		if (prevProps.match && prevProps.match.params.id !== match.params.id) {
+			actions.getDetailAction(match.params.id);
+			this.setState({ open: false });
+		}
 	}
 
 	getTypeId = (url: string) => {
@@ -66,30 +78,64 @@ class DetailPage extends React.Component<Props, State> {
 
 	onTypeCLick = async (type: any) => {
 		try {
+			this.setState({ loading: true });
 			const id = this.getTypeId(type.url);
 			const resp = await createApiCall({
 				method: MethodType.GET,
 				url: `${typeRoute}${id}`,
 				data: undefined,
 			});
+			const pokemon = resp.pokemon.map((item: any) => ({
+				name: item.pokemon.name,
+				url: item.pokemon.url,
+			}));
 			this.setState({
-				pokemon: resp.pokemon,
+				pokemon,
 				open: true,
+				loading: false,
 			});
 		} catch (err) {
+			this.setState({ loading: false });
 			console.log(err);
 		}
 	};
 
-	render() {
-		const { classes, loading, data } = this.props;
+	toggleModal = () => {
+		this.setState((state) => ({ open: !state.open }));
+	};
 
+	handleBack = () => {
+		this.props.history.push("/");
+	};
+
+	render() {
+		const { classes, loading, data, history } = this.props;
 		return (
 			<Grid container className={classes.root}>
-				{loading && <Loader />}
+				{(loading || this.state.loading) && <Loader />}
+				<Grid item xs={12}>
+					<div className={classes.buttonContainer}>
+						<Button
+							className={classes.button}
+							variant="contained"
+							color="secondary"
+							onClick={this.handleBack}
+						>
+							Back to main page
+						</Button>
+					</div>
+				</Grid>
 				<Grid item>
 					<DetailCard data={data} onTypeCLick={this.onTypeCLick} />
 				</Grid>
+				<Dialog
+					open={this.state.open}
+					onClose={this.toggleModal}
+					aria-labelledby="simple-modal-title"
+					aria-describedby="simple-modal-description"
+				>
+					<ListingTable list={this.state.pokemon} history={history} />
+				</Dialog>
 			</Grid>
 		);
 	}

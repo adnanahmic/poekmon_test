@@ -97,7 +97,7 @@ class ListingPage extends React.Component<Props> {
 		return (
 			<Grid container className={classes.root}>
 				{loading && <Loader />}
-				<Grid item xs={6}>
+				<Grid item xs={12} md={6}>
 					<TextField
 						fullWidth
 						id="search"
@@ -105,7 +105,7 @@ class ListingPage extends React.Component<Props> {
 						onChange={this.handleChange}
 					/>
 				</Grid>
-				<Grid item xs={6}>
+				<Grid item xs={12} md={6}>
 					<div className={classes.buttonContainer}>
 						<Button
 							variant="contained"
@@ -120,7 +120,7 @@ class ListingPage extends React.Component<Props> {
 								color="secondary"
 								onClick={this.prevPage}
 							>
-								Previous Page
+								Previous
 							</Button>
 						)}{" "}
 						<Button
@@ -128,7 +128,7 @@ class ListingPage extends React.Component<Props> {
 							color="secondary"
 							onClick={this.nextPage}
 						>
-							Next Page
+							Next
 						</Button>
 					</div>
 				</Grid>
